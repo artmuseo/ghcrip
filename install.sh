@@ -1,6 +1,18 @@
 #!/bin/bash
+export GHCR_DIR=$HOME/.ghcrip
+mkdir -p $GHCR_DIR
 
-cat > /usr/local/bin/ghcrip <<EOT
+cat > ~/.bash_profile <<EOF
+export PATH="$GHCR_DIR:$PATH"
+EOF
+source ~/.bash_profile
+
+cat > ~/.bashrc <<EOF
+export PATH="$HOME"
+EOF
+source ~/.bashrc
+
+cat > $GHCR_DIR/ghcrip <<EOT
 set -e
 
 export UUID=$(uuidgen)
