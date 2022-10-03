@@ -38,5 +38,6 @@ echo "Checking out..." >> ${TEMP_DIR}/script.log
 git -C $TEMP_DIR checkout ${COMMIT} >> ${TEMP_DIR}/script.log 2>&1
 git -C $TEMP_DIR pull >> ${TEMP_DIR}/script.log 2>&1
 /bin/bash $TEMP_DIR/$EXECUTABLE $@
-
 EOT
+
+chmod -R 755 $GHCR_DIR
