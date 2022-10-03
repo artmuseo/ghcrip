@@ -15,7 +15,6 @@ source ~/.bashrc
 cat > $GHCR_DIR/ghcrip <<EOT
 set -e
 
-export LARGEST=2
 export UUID=$(uuidgen)
 export REPO="\$1"
 export EXECUTABLE="\$2"
@@ -28,8 +27,8 @@ cat > ./.gitignore << EOF
 EOF
 fi
 
-export TEMP_DIR="\$(pwd)/.ghcrip/\$(echo \${REPO} | awk -F// '{print \$NF}')"
-export LOG_DIR="\$(pwd)/.ghcrip/.log/\$(echo \${REPO} | awk -F// '{print \$NF}')"
+export TEMP_DIR="${GHCR_DIR}/.ghcrip/\$(echo \${REPO} | awk -F// '{print \$NF}')"
+export LOG_DIR="${GHCR_DIR}/.ghcrip/.log/\$(echo \${REPO} | awk -F// '{print \$NF}')"
 
 if ! test -d \$LOG_DIR; then
     mkdir -p \$LOG_DIR
