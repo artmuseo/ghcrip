@@ -15,29 +15,37 @@ source ~/.bashrc
 cat > $GHCR_DIR/ghcrip <<EOT
 set -e
 
+export LARGEST=2
 export UUID=$(uuidgen)
 export REPO="\$1"
 export EXECUTABLE="\$2"
-export COMMIT="\${3:-main}"
 
-cat > ./.ghcrip.gitignore << EOF
+if ! test -f .gitignore  || ! grep -q -e "*.bstate" -e "*.temp" -e "*.ghcrip" ".gitignore" ; then
+cat > ./.gitignore << EOF
 *.bstate
 *.temp
 *.ghcrip
 EOF
-
-export TEMP_DIR="$(pwd)/.ghcrip/$(echo \${REPO} | awk -F// '{print $NF}')"
-if test -d \$TEMP_DIR; then
-    echo "Using cached repo." >> \${TEMP_DIR}/script.log 2>&1
-else
-    mkdir -p \$TEMP_DIR
-    git clone \$REPO \$TEMP_DIR  >> \${TEMP_DIR}/script.log 2>&1
 fi
 
-echo "Checking out..." >> \${TEMP_DIR}/script.log
-git -C \$TEMP_DIR checkout \${COMMIT} >> \${TEMP_DIR}/script.log 2>&1
-git -C \$TEMP_DIR pull >> \${TEMP_DIR}/script.log 2>&1
-/bin/bash \$TEMP_DIR/\$EXECUTABLE "\$@"
+export TEMP_DIR="\$(pwd)/.ghcrip/\$(echo \${REPO} | awk -F// '{print \$NF}')"
+export LOG_DIR="\$(pwd)/.ghcrip/.log/\$(echo \${REPO} | awk -F// '{print \$NF}')"
+
+if ! test -d \$LOG_DIR; then
+    mkdir -p \$LOG_DIR
+fi
+
+if test -d \$TEMP_DIR; then
+    echo "Using cached repo." >> \${LOG_DIR}/script.log 2>&1
+else
+    mkdir -p \$TEMP_DIR
+    git clone \$REPO \$TEMP_DIR  >> \${LOG_DIR}/script.log 2>&1
+fi
+
+echo "Checking out..." >> \${LOG_DIR}/script.log
+git -C \$TEMP_DIR checkout main >> \${LOG_DIR}/script.log 2>&1
+git -C \$TEMP_DIR pull >> \${LOG_DIR}/script.log 2>&1
+/bin/bash \$TEMP_DIR/\$EXECUTABLE "\${@:3}"
 EOT
 
 chmod -R 755 $GHCR_DIR
