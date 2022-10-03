@@ -8,7 +8,7 @@ EOF
 source ~/.bash_profile
 
 cat > ~/.bashrc <<EOF
-export PATH="$HOME:$PATH"
+export PATH="$GHCR_DIR:$PATH"
 EOF
 source ~/.bashrc
 
