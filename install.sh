@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat /usr/local/bin/ghcrip > <<EOT
+cat > /usr/local/bin/ghcrip <<EOT
 set -e
 
 export UUID=$(uuidgen)
