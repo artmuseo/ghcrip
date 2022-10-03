@@ -8,7 +8,7 @@ EOF
 source ~/.bash_profile
 
 cat > ~/.bashrc <<EOF
-export PATH="$HOME"
+export PATH="$HOME:$PATH"
 EOF
 source ~/.bashrc
 
